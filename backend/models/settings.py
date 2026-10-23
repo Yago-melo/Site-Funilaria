@@ -34,6 +34,8 @@ class BusinessSettings(BaseModel):
     slot_step_min: int = Field(default=60, ge=15, le=240)
     daily_summary_enabled: bool = True
     daily_summary_time: str = Field(default="07:30", pattern=r"^\d{2}:\d{2}$")
+    reminder_enabled: bool = True
+    reminder_time: str = Field(default="18:00", pattern=r"^\d{2}:\d{2}$")
 
 
 class SiteInfo(BaseModel):

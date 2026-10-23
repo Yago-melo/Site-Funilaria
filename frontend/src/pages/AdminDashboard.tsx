@@ -1,10 +1,14 @@
-import { Link, Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, Navigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { CalendarClock, ExternalLink, Images, Loader2, LogOut, Timer, TriangleAlert } from "lucide-react";
+import { CalendarClock, ExternalLink, Images, Loader2, LogOut, MessageSquareQuote, Timer, TriangleAlert } from "lucide-react";
+import { toast } from "sonner";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BrandMark } from "@/components/Navbar";
 import AppointmentsTab from "@/components/admin/AppointmentsTab";
+import QuotesTab from "@/components/admin/QuotesTab";
+import ReviewsTab from "@/components/admin/ReviewsTab";
 import GalleryTab from "@/components/admin/GalleryTab";
 import SettingsTab from "@/components/admin/SettingsTab";
 import IntegrationsTab from "@/components/admin/IntegrationsTab";
@@ -14,9 +18,24 @@ import { fmtDate } from "@/lib/format";
 import type { AdminStats, AdminUser } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
+function CountDot({ n, testId }: { n?: number; testId: string }) {
+  if (!n) return null;
+  return <span className="ml-1.5 rounded-full bg-amber-500 px-1.5 font-mono text-[10px] font-bold leading-4 text-black" data-testid={testId}>{n}</span>;
+}
+
 export default function AdminDashboard() {
+  const [params, setParams] = useSearchParams();
+  const [tab, setTab] = useState(params.get("google") ? "integracoes" : "agendamentos");
   const me = useQuery({ queryKey: ["me"], queryFn: () => apiGet<AdminUser>("/auth/me"), retry: false });
   const stats = useQuery({ queryKey: ["admin-stats"], queryFn: () => apiGet<AdminStats>("/admin/stats"), enabled: Boolean(me.data) });
+
+  useEffect(() => {
+    const g = params.get("google");
+    if (!g) return;
+    if (g === "ok") toast.success("Google Agenda conectado! Novos agendamentos vão direto para sua agenda.");
+    else toast.error("Não foi possível conectar o Google Agenda. Tente novamente.");
+    setParams({}, { replace: true });
+  }, [params, setParams]);
 
   if (me.isError && me.error instanceof ApiError && me.error.status === 401) return <Navigate to="/admin" replace />;
 
@@ -25,6 +44,7 @@ export default function AdminDashboard() {
     { label: "Hoje", value: s?.today_count, icon: CalendarClock, id: "today" },
     { label: "Próximos", value: s?.upcoming_count, icon: Timer, id: "upcoming" },
     { label: "Pendentes", value: s?.pending_count, icon: TriangleAlert, id: "pending" },
+    { label: "Orçamentos novos", value: s?.quotes_new, icon: MessageSquareQuote, id: "quotes" },
     { label: "Itens na galeria", value: s?.gallery_count, icon: Images, id: "gallery" },
   ];
 
@@ -54,7 +74,7 @@ export default function AdminDashboard() {
           <h1 className="mt-2 font-heading text-3xl font-bold text-white">Painel da oficina</h1>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4" data-testid="admin-stats">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5" data-testid="admin-stats">
           {METRICS.map((m) => (
             <div key={m.id} className="rounded-xl border border-line bg-panel p-5" data-testid={`admin-stat-${m.id}`}>
               <m.icon className="size-5 text-amber-400" />
@@ -66,14 +86,18 @@ export default function AdminDashboard() {
           ))}
         </div>
 
-        <Tabs defaultValue="agendamentos">
-          <TabsList className="flex-wrap" data-testid="admin-tabs">
+        <Tabs value={tab} onValueChange={(v) => setTab(String(v))}>
+          <TabsList className="h-auto flex-wrap" data-testid="admin-tabs">
             <TabsTrigger value="agendamentos" data-testid="admin-tab-agendamentos">Agendamentos</TabsTrigger>
+            <TabsTrigger value="orcamentos" data-testid="admin-tab-orcamentos">Orçamentos<CountDot n={s?.quotes_new} testId="admin-tab-orcamentos-count" /></TabsTrigger>
+            <TabsTrigger value="avaliacoes" data-testid="admin-tab-avaliacoes">Avaliações<CountDot n={s?.reviews_pending} testId="admin-tab-avaliacoes-count" /></TabsTrigger>
             <TabsTrigger value="galeria" data-testid="admin-tab-galeria">Galeria</TabsTrigger>
             <TabsTrigger value="integracoes" data-testid="admin-tab-integracoes">Integrações</TabsTrigger>
             <TabsTrigger value="configuracoes" data-testid="admin-tab-configuracoes">Configurações</TabsTrigger>
           </TabsList>
           <TabsContent value="agendamentos" className="mt-6"><AppointmentsTab /></TabsContent>
+          <TabsContent value="orcamentos" className="mt-6"><QuotesTab /></TabsContent>
+          <TabsContent value="avaliacoes" className="mt-6"><ReviewsTab /></TabsContent>
           <TabsContent value="galeria" className="mt-6"><GalleryTab /></TabsContent>
           <TabsContent value="integracoes" className="mt-6"><IntegrationsTab /></TabsContent>
           <TabsContent value="configuracoes" className="mt-6"><SettingsTab /></TabsContent>

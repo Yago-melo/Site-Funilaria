@@ -13,7 +13,7 @@ import { queryClient } from "@/lib/queryClient";
 import { WEEKDAYS, fmtDuration } from "@/lib/format";
 import type { BusinessSettings, Service, ServiceCreate } from "@/lib/types";
 
-type TextKey = "business_name" | "tagline" | "whatsapp_number" | "owner_whatsapp" | "whatsapp_message" | "address" | "city" | "email" | "instagram" | "open_time" | "close_time" | "daily_summary_time";
+type TextKey = "business_name" | "tagline" | "whatsapp_number" | "owner_whatsapp" | "whatsapp_message" | "address" | "city" | "email" | "instagram" | "open_time" | "close_time" | "daily_summary_time" | "reminder_time";
 
 function Field({ label, k, form, set, hint, type = "text" }: {
   label: string; k: TextKey; form: BusinessSettings; set: (k: TextKey, v: string) => void; hint?: string; type?: string;
@@ -92,6 +92,13 @@ function SettingsForm({ initial }: { initial: BusinessSettings }) {
           <Checkbox checked={form.daily_summary_enabled} onCheckedChange={(c) => setForm((f) => ({ ...f, daily_summary_enabled: Boolean(c) }))} data-testid="settings-daily-enabled-checkbox" />
           Enviar automaticamente a agenda do dia pelo WhatsApp
         </label>
+        <div className="grid items-end gap-4 sm:grid-cols-4">
+          <Field label="Lembrete ao cliente (véspera)" k="reminder_time" type="time" form={form} set={set} />
+          <label className="flex items-center gap-2 pb-2 text-sm text-neutral-200 sm:col-span-3">
+            <Checkbox checked={form.reminder_enabled} onCheckedChange={(c) => setForm((f) => ({ ...f, reminder_enabled: Boolean(c) }))} data-testid="settings-reminder-enabled-checkbox" />
+            Enviar lembrete pelo WhatsApp ao cliente no dia anterior ao agendamento
+          </label>
+        </div>
       </section>
 
       <Button type="submit" className="h-10 px-6 font-semibold" disabled={save.isPending} data-testid="settings-save-button">

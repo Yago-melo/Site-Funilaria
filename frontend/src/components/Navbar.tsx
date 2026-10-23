@@ -11,7 +11,8 @@ import { cn } from "@/lib/utils";
 const LINKS = [
   { href: "/#servicos", label: "Serviços" },
   { href: "/#trabalhos", label: "Trabalhos" },
-  { href: "/#processo", label: "Como funciona" },
+  { href: "/#avaliacoes", label: "Avaliações" },
+  { href: "/orcamento", label: "Orçamento por foto" },
   { href: "/#contato", label: "Contato" },
 ];
 
@@ -39,19 +40,19 @@ export default function Navbar() {
     <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0B0D11]/85 backdrop-blur-xl" data-testid="site-navbar">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
         <BrandMark />
-        <nav className="hidden items-center gap-7 md:flex">
+        <nav className="hidden items-center gap-6 lg:flex">
           {LINKS.map((l) => (
             <a
               key={l.href}
               href={l.href}
               className="text-sm font-medium text-neutral-400 transition-colors duration-200 hover:text-amber-400"
-              data-testid={`nav-link-${l.href.replace("/#", "")}`}
+              data-testid={`nav-link-${l.href.replace(/^\/#?/, "")}`}
             >
               {l.label}
             </a>
           ))}
         </nav>
-        <div className="hidden items-center gap-2 md:flex">
+        <div className="hidden items-center gap-2 lg:flex">
           <a
             href={wa}
             target="_blank"
@@ -71,7 +72,7 @@ export default function Navbar() {
         </div>
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger
-            className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "md:hidden")}
+            className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "lg:hidden")}
             aria-label="Abrir menu"
             data-testid="nav-mobile-menu-button"
           >

@@ -15,7 +15,7 @@ load_dotenv(ROOT_DIR / '.env')
 from lib.db import client, db, ensure_indexes
 from lib.scheduler import daily_loop
 from lib.storage import init_storage
-from routers import appointments, auth, gallery, integrations, site
+from routers import appointments, auth, gallery, google, integrations, quotes, reviews, site
 
 logger = logging.getLogger(__name__)
 
@@ -50,6 +50,9 @@ api_router.include_router(site.router)
 api_router.include_router(gallery.router)
 api_router.include_router(appointments.router)
 api_router.include_router(integrations.router)
+api_router.include_router(quotes.router)
+api_router.include_router(reviews.router)
+api_router.include_router(google.router)
 
 app.add_middleware(
     CORSMiddleware,

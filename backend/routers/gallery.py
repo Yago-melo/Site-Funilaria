@@ -1,35 +1,15 @@
 import re
-import uuid
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import Response
 
-from lib.auth import require_admin
+from lib.auth import COOKIE_NAME, require_admin
 from lib.db import db
-from lib.storage import APP_NAME, get_object, put_object
+from lib.media import store_upload
+from lib.storage import get_object
 from models.gallery import GalleryItem
 
 router = APIRouter(tags=["gallery"])
-
-MAX_BYTES = 150 * 1024 * 1024
-ALLOWED = {
-    "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/gif": "gif",
-    "video/mp4": "mp4", "video/webm": "webm", "video/quicktime": "mov",
-}
-
-
-async def _store(file: UploadFile) -> tuple[str, str]:
-    ctype = (file.content_type or "").lower()
-    if ctype not in ALLOWED:
-        raise HTTPException(status_code=400, detail=f"Formato não suportado: {ctype or 'desconhecido'}")
-    data = await file.read()
-    if len(data) > MAX_BYTES:
-        raise HTTPException(status_code=413, detail="Arquivo maior que 150MB")
-    path = f"{APP_NAME}/gallery/{uuid.uuid4()}.{ALLOWED[ctype]}"
-    result = await put_object(path, data, ctype)
-    stored = result.get("path", path)
-    await db.media_files.insert_one({"storage_path": stored, "content_type": ctype, "size": len(data), "is_deleted": False})
-    return f"/api/media/{stored}", ctype
 
 
 @router.get("/gallery", response_model=list[GalleryItem])
@@ -46,16 +26,15 @@ async def upload_gallery_item(
     category: str = Form("Martelinho de Ouro"),
     description: str = Form(""),
 ):
-    media_url, ctype = await _store(file)
+    media_url, ctype = await store_upload(file, "gallery")
+    is_video = ctype.startswith("video/")
     before_url = None
-    if before is not None and before.filename:
-        if not (before.content_type or "").startswith("image/"):
-            raise HTTPException(status_code=400, detail="A foto de 'antes' deve ser uma imagem")
-        before_url, _ = await _store(before)
+    if before is not None and before.filename and not is_video:
+        before_url, _ = await store_upload(before, "gallery", images_only=True)
     item = GalleryItem(
-        type="video" if ctype.startswith("video/") else "image",
+        type="video" if is_video else "image",
         title=title.strip() or "Trabalho", category=category.strip(), description=description.strip(),
-        media_url=media_url, before_url=before_url if not ctype.startswith("video/") else None,
+        media_url=media_url, before_url=before_url,
     )
     await db.gallery.insert_one({**item.model_dump(), "is_deleted": False})
     return item
@@ -74,9 +53,12 @@ async def serve_media(path: str, request: Request):
     record = await db.media_files.find_one({"storage_path": path, "is_deleted": False})
     if not record:
         raise HTTPException(status_code=404, detail="Arquivo não encontrado")
+    if record.get("private"):
+        await require_admin(request.cookies.get(COOKIE_NAME))  # customer quote photos: admin only
     data, _ = await get_object(path)
     ctype = record["content_type"]
-    headers = {"Accept-Ranges": "bytes", "Cache-Control": "public, max-age=86400"}
+    cache = "private, max-age=3600" if record.get("private") else "public, max-age=86400"
+    headers = {"Accept-Ranges": "bytes", "Cache-Control": cache}
     total = len(data)
     match = re.match(r"bytes=(\d*)-(\d*)", request.headers.get("range", ""))
     if match and total:

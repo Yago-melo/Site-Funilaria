@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
-import { ArrowRight, CalendarCheck, Clock3, PaintBucket, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, CalendarCheck, Camera, Clock3, PaintBucket, ShieldCheck, Sparkles } from "lucide-react";
 import { SiWhatsapp } from "@icons-pack/react-simple-icons";
 import { buttonVariants } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import BeforeAfterSlider from "@/components/BeforeAfterSlider";
 import GalleryGrid from "@/components/GalleryGrid";
+import ReviewsSection from "@/components/ReviewsSection";
 import { useSite } from "@/lib/hooks";
 import { fmtDuration, waLink } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -87,6 +88,9 @@ export default function Home() {
                 <SiWhatsapp size={18} /> Falar no WhatsApp
               </a>
             </div>
+            <Link to="/orcamento" className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-amber-300 hover:underline animate-rise [animation-delay:300ms]" data-testid="hero-orcamento-link">
+              <Camera className="size-4" /> Prefere mandar fotos? Peça um orçamento por foto <ArrowRight className="size-4" />
+            </Link>
             <dl className="mt-12 grid max-w-lg grid-cols-3 gap-6 border-t border-white/10 pt-6">
               {[["100%", "tinta original"], ["1 dia", "na maioria dos reparos"], ["0", "massa ou lixa"]].map(([v, l]) => (
                 <div key={l}>
@@ -199,6 +203,8 @@ export default function Home() {
         </div>
       </section>
 
+      <ReviewsSection />
+
       {/* CTA */}
       <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
         <motion.div {...fadeUp} className="relative overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-br from-[#1A202C] to-[#0B0D11] p-8 sm:p-12" data-testid="cta-section">
@@ -211,6 +217,9 @@ export default function Home() {
             <div className="flex flex-wrap gap-3">
               <Link to="/agendar" className={cn(buttonVariants({ size: "lg" }), "h-12 px-6 font-semibold")} data-testid="cta-agendar-button">
                 <CalendarCheck className="size-5" /> Agendar
+              </Link>
+              <Link to="/orcamento" className={cn(buttonVariants({ size: "lg", variant: "outline" }), "h-12 border-amber-500/50 px-6 font-semibold text-amber-300")} data-testid="cta-orcamento-button">
+                <Camera className="size-5" /> Orçamento por foto
               </Link>
               <a href={wa} target="_blank" rel="noreferrer" className="inline-flex h-12 items-center gap-2 rounded-lg border border-[#25D366]/60 px-6 font-semibold text-[#25D366] transition-colors duration-200 hover:bg-[#25D366]/10" data-testid="cta-whatsapp-button">
                 <SiWhatsapp size={18} /> WhatsApp

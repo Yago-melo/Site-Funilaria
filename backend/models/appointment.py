@@ -32,6 +32,8 @@ class Appointment(BaseModel):
     notes: str = ""
     status: AppointmentStatus = "pendente"
     gcal_event_id: str | None = None
+    reminder_sent_at: datetime | None = None
+    reminder_mock: bool | None = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
@@ -58,3 +60,5 @@ class AdminStats(BaseModel):
     upcoming_count: int
     pending_count: int
     gallery_count: int
+    quotes_new: int
+    reviews_pending: int

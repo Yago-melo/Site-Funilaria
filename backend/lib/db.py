@@ -38,6 +38,17 @@ INDEXES: dict[str, list[IndexModel]] = {
         IndexModel([("date", ASCENDING), ("kind", ASCENDING)], name="date_kind"),
         IndexModel([("sent_at", DESCENDING)], name="sent_desc"),
     ],
+    "quotes": [
+        IndexModel([("id", ASCENDING)], name="id", unique=True),
+        IndexModel([("status", ASCENDING), ("created_at", DESCENDING)], name="status_created"),
+        IndexModel([("created_at", DESCENDING)], name="created_desc"),
+    ],
+    "reviews": [
+        IndexModel([("id", ASCENDING)], name="id", unique=True),
+        IndexModel([("status", ASCENDING), ("created_at", DESCENDING)], name="status_created"),
+        IndexModel([("created_at", DESCENDING)], name="created_desc"),
+    ],
+    "google_tokens": [IndexModel([("id", ASCENDING)], name="id", unique=True)],
 }
 
 

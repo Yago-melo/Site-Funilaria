@@ -19,6 +19,8 @@ export const FALLBACK_SETTINGS: BusinessSettings = {
   slot_step_min: 60,
   daily_summary_enabled: true,
   daily_summary_time: "07:30",
+  reminder_enabled: true,
+  reminder_time: "18:00",
 };
 
 export function useSite() {

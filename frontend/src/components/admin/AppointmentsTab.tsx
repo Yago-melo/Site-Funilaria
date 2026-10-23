@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { CalendarCheck, CalendarX2, Loader2 } from "lucide-react";
+import { Bell, BellRing, CalendarCheck, CalendarX2, Loader2 } from "lucide-react";
 import { SiWhatsapp } from "@icons-pack/react-simple-icons";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { apiGet, apiPatch, errorMessage } from "@/lib/api";
+import { apiGet, apiPatch, apiPost, errorMessage } from "@/lib/api";
+import { Button } from "@/components/ui/button";
 import { queryClient } from "@/lib/queryClient";
 import { STATUS_CLASS, STATUS_LABEL, fmtDate, fmtPhone, waLink } from "@/lib/format";
-import type { Appointment, AppointmentStatus, AppointmentStatusUpdate } from "@/lib/types";
+import type { Appointment, AppointmentStatus, AppointmentStatusUpdate, DispatchLog } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 type Scope = "today" | "upcoming" | "past" | "all";
@@ -33,6 +34,17 @@ export default function AppointmentsTab() {
       toast.success(`Status alterado para ${STATUS_LABEL[a.status]}`);
       queryClient.invalidateQueries({ queryKey: ["admin-appointments"] });
       queryClient.invalidateQueries({ queryKey: ["admin-stats"] });
+    },
+    onError: (err) => toast.error(errorMessage(err)),
+  });
+
+  const remind = useMutation({
+    mutationFn: (id: string) => apiPost<DispatchLog>(`/admin/appointments/${id}/remind`),
+    onSuccess: (log) => {
+      if (!log.ok) toast.error(log.detail);
+      else toast.success(log.mock ? "Lembrete gerado (envio SIMULADO)." : "Lembrete enviado ao cliente!");
+      queryClient.invalidateQueries({ queryKey: ["admin-appointments"] });
+      queryClient.invalidateQueries({ queryKey: ["whatsapp-logs"] });
     },
     onError: (err) => toast.error(errorMessage(err)),
   });
@@ -74,6 +86,7 @@ export default function AppointmentsTab() {
               <TableHead>Veículo</TableHead>
               <TableHead>Serviço</TableHead>
               <TableHead>Agenda</TableHead>
+              <TableHead>Lembrete</TableHead>
               <TableHead className="w-44">Status</TableHead>
             </TableRow>
           </TableHeader>
@@ -106,7 +119,22 @@ export default function AppointmentsTab() {
                 </TableCell>
                 <TableCell>
                   {a.gcal_event_id && a.status !== "cancelado" ? (
-                    <span className="inline-flex items-center gap-1 text-xs text-emerald-300" title={a.gcal_event_id}><CalendarCheck className="size-3.5" /> Sincronizado</span>
+                    <span className="inline-flex items-center gap-1 text-xs text-emerald-300" title={a.gcal_event_id}>
+                      <CalendarCheck className="size-3.5" /> {a.gcal_event_id.startsWith("mock-") ? "Registrado (simulado)" : "Google Agenda"}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-neutral-500">—</span>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {a.reminder_sent_at ? (
+                    <span className="inline-flex items-center gap-1 text-xs text-emerald-300" data-testid={`admin-appointment-reminder-status-${a.id}`}>
+                      <BellRing className="size-3.5" /> {a.reminder_mock ? "Simulado" : "Enviado"}
+                    </span>
+                  ) : a.status === "pendente" || a.status === "confirmado" ? (
+                    <Button size="xs" variant="outline" disabled={remind.isPending} onClick={() => remind.mutate(a.id)} data-testid={`admin-appointment-remind-${a.id}`}>
+                      <Bell className="size-3" /> Enviar
+                    </Button>
                   ) : (
                     <span className="text-xs text-neutral-500">—</span>
                   )}

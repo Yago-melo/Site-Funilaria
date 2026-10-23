@@ -11,6 +11,8 @@ from lib.auth import require_admin
 from lib.dates import today_iso
 from lib.db import db
 from lib.settings_store import get_settings
+from lib.whatsapp import send_reminder
+from models.integrations import DispatchLog
 from models.appointment import (
     AdminStats, Appointment, AppointmentCreate, AppointmentStatusUpdate, Availability, BookingResult,
 )
@@ -92,7 +94,8 @@ async def create_appointment(body: AppointmentCreate):
         + (f" ({appt.car_plate})" if appt.car_plate else "")
     )
     wa = f"https://wa.me/{re.sub(r'[^0-9]', '', settings.whatsapp_number)}?text={quote(text)}"
-    return BookingResult(appointment=appt, whatsapp_url=wa, calendar_synced=True, calendar_mocked=gcal.MOCKED)
+    return BookingResult(appointment=appt, whatsapp_url=wa, calendar_synced=True,
+                         calendar_mocked=gcal.is_mock_event(appt.gcal_event_id))
 
 
 @router.get("/admin/appointments", response_model=list[Appointment], dependencies=[Depends(require_admin)])
@@ -139,4 +142,14 @@ async def admin_stats():
         upcoming_count=await db.appointments.count_documents({"date": {"$gte": today}, "status": {"$in": ACTIVE}}),
         pending_count=await db.appointments.count_documents({"date": {"$gte": today}, "status": "pendente"}),
         gallery_count=await db.gallery.count_documents({"is_deleted": {"$ne": True}}),
+        quotes_new=await db.quotes.count_documents({"status": "novo"}),
+        reviews_pending=await db.reviews.count_documents({"status": "pendente"}),
     )
+
+
+@router.post("/admin/appointments/{id}/remind", response_model=DispatchLog, dependencies=[Depends(require_admin)])
+async def remind_now(id: str):
+    doc = await db.appointments.find_one({"id": id}, {"_id": 0})
+    if not doc:
+        raise HTTPException(status_code=404, detail="Agendamento não encontrado")
+    return DispatchLog(**await send_reminder(doc, kind="reminder_manual"))
