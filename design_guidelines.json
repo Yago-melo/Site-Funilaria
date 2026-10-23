@@ -1,0 +1,236 @@
+{
+  "theme": "dark",
+  "archetype": "THE PERFORMANCE PRO & PRECISION LUXURY (Tactical Craftsmanship)",
+  "emotional_tone": "High precision, artisanal craftsmanship, trustworthy automotive mastery, premium restoration feel",
+  "typography": {
+    "font_family_heading": "Outfit, sans-serif",
+    "font_family_body": "Plus Jakarta Sans, sans-serif",
+    "font_family_mono": "JetBrains Mono, monospace",
+    "fontsource_imports": [
+      "@fontsource-variable/outfit",
+      "@fontsource-variable/plus-jakarta-sans",
+      "@fontsource-variable/jetbrains-mono"
+    ],
+    "scale_px": {
+      "display": 56,
+      "h1": 44,
+      "h2": 32,
+      "h3": 24,
+      "h4": 18,
+      "body": 16,
+      "caption": 14
+    },
+    "rules": {
+      "headings": "font-heading font-bold tracking-tight text-neutral-100",
+      "labels_overlines": "text-xs uppercase tracking-[0.2em] font-semibold text-amber-400/90",
+      "body": "font-sans text-base leading-relaxed text-neutral-300",
+      "mono_specs": "font-mono text-sm tracking-normal"
+    }
+  },
+  "colors": {
+    "surfaces": [
+      {
+        "name": "page",
+        "kind": "solid",
+        "bg": "#0B0D11",
+        "on_bg": "#F3F4F6",
+        "on_bg_muted": "#9CA3AF",
+        "roles": {
+          "link": "#FBBF24",
+          "error": "#F87171",
+          "success": "#34D399",
+          "brand_highlight": "#F59E0B"
+        }
+      },
+      {
+        "name": "panel",
+        "kind": "solid",
+        "bg": "#131720",
+        "on_bg": "#F9FAFB",
+        "on_bg_muted": "#A1A1AA",
+        "roles": {
+          "border": "#272F3E",
+          "highlight": "#D97706"
+        }
+      },
+      {
+        "name": "card_elevated",
+        "kind": "solid",
+        "bg": "#1A202C",
+        "on_bg": "#FFFFFF",
+        "on_bg_muted": "#CBD5E1",
+        "roles": {
+          "hover_border": "#F59E0B"
+        }
+      },
+      {
+        "name": "inverse",
+        "kind": "solid",
+        "bg": "#F8FAFC",
+        "on_bg": "#0F172A",
+        "on_bg_muted": "#475569"
+      },
+      {
+        "name": "hero",
+        "kind": "image",
+        "contrast_against": "#080A0E",
+        "guarantee": "scrim: linear-gradient(to right, rgba(11,13,17,0.95) 0%, rgba(11,13,17,0.80) 50%, rgba(11,13,17,0.60) 100%)",
+        "on_bg": "#FFFFFF",
+        "on_bg_muted": "#D1D5DB",
+        "roles": {
+          "link": "#FDE047",
+          "badge_bg": "#1E293B",
+          "badge_text": "#FBBF24"
+        }
+      },
+      {
+        "name": "glass_header",
+        "kind": "glass",
+        "contrast_against": "#0F131A",
+        "guarantee": "backdrop-blur-xl bg-[#0B0D11]/85 border-b border-white/10",
+        "on_bg": "#FFFFFF",
+        "on_bg_muted": "#9CA3AF"
+      },
+      {
+        "name": "whatsapp_floating",
+        "kind": "solid",
+        "bg": "#25D366",
+        "on_bg": "#FFFFFF",
+        "on_bg_muted": "#E2E8F0"
+      },
+      {
+        "name": "badge_gold",
+        "kind": "solid",
+        "bg": "#78350F",
+        "on_bg": "#FEF3C7",
+        "on_bg_muted": "#FDE68A"
+      }
+    ],
+    "accent": "#F59E0B",
+    "on_accent": "#000000",
+    "secondary_accent": "#25D366",
+    "on_secondary_accent": "#FFFFFF"
+  },
+  "entry_surfaces": {
+    "/": "split hero — brand positioning, precision badge & primary WhatsApp/Agendar CTAs on left, glossy craftsmanship vehicle preview with interactive before-after teaser on right",
+    "/agendar": "card-based 3-step booking wizard with visual step indicator, service selector, interactive calendar with available slot buttons, and vehicle detail form",
+    "/admin": "compact auth portal with branded workshop badge, email/password login card and instant demo credential helper",
+    "/admin/dashboard": "tactical dark dashboard with header metrics, live WhatsApp sync status bar, appointments table, gallery manager, and Google Calendar sync trigger"
+  },
+  "layouts_and_grids": {
+    "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+    "bento_portfolio": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+    "features_grid": "grid grid-cols-1 md:grid-cols-3 gap-8",
+    "booking_layout": "grid grid-cols-1 lg:grid-cols-12 gap-8 items-start",
+    "admin_layout": "space-y-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
+  },
+  "motion": {
+    "engine": "motion/react",
+    "standard_transition": "transition-colors duration-200 ease-in-out, transform 0.2s ease",
+    "hover_lift": "hover:-translate-y-1 hover:shadow-xl hover:shadow-amber-500/10",
+    "entrance": {
+      "initial": { "opacity": 0, "y": 20 },
+      "animate": { "opacity": 1, "y": 0 },
+      "transition": { "duration": 0.4, "ease": "easeOut" }
+    },
+    "reduced_motion": "respect prefers-reduced-motion with conditional animations"
+  },
+  "accessibility": {
+    "min_contrast": "WCAG AA (4.5:1 for normal text, 3:1 for large graphical affordances)",
+    "data_testid_required": true,
+    "focus_states": "focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-neutral-900",
+    "aria_labels": "All icon-only buttons (WhatsApp floating, close modal, video player, delete action) must have aria-label and data-testid"
+  },
+  "image_urls": [
+    {
+      "category": "hero_background",
+      "description": "High-end automotive workshop detailing and car finish",
+      "url": "https://images.unsplash.com/photo-1708805282706-f44730b7e527?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1OTV8MHwxfHNlYXJjaHwyfHxsdXh1cnklMjBnbG9zc3klMjBjYXIlMjBkZXRhaWxpbmclMjByZWZsZWN0aW9ufGVufDB8fHx8MTc5Mjc2MzM3Nnww&ixlib=rb-4.1.0&q=85",
+      "placement": "Hero section background on Home page"
+    },
+    {
+      "category": "workshop_action",
+      "description": "Professional mechanic repairing vehicle body / precision work",
+      "url": "https://images.unsplash.com/photo-1615906655593-ad0386982a0f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwxfHxhdXRvJTIwYm9keSUyMHJlcGFpciUyMHdvcmtzaG9wJTIwbWVjaGFuaWN8ZW58MHx8fHwxNzkyNzYzMzc2fDA&ixlib=rb-4.1.0&q=85",
+      "placement": "About the Funileiro / Nadis Car section"
+    },
+    {
+      "category": "precision_detail",
+      "description": "Auto repair shop interior with clean bays and lighting",
+      "url": "https://images.pexels.com/photos/33814734/pexels-photo-33814734.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "placement": "Services & workshop facilities gallery card"
+    },
+    {
+      "category": "portfolio_sample_1",
+      "description": "Glossy automotive reflection after paintless repair",
+      "url": "https://images.pexels.com/photos/29755711/pexels-photo-29755711.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "placement": "Galeria de Trabalhos - Trabalho 1 (Capô / Pintura Original Preservada)"
+    },
+    {
+      "category": "portfolio_sample_2",
+      "description": "Side mirror and door curvature detail after dent removal",
+      "url": "https://images.pexels.com/photos/7540400/pexels-photo-7540400.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "placement": "Galeria de Trabalhos - Trabalho 2 (Porta Lateral e Retrovisor)"
+    },
+    {
+      "category": "portfolio_sample_3",
+      "description": "Mechanic inspecting chassis and body alignment",
+      "url": "https://images.pexels.com/photos/33814735/pexels-photo-33814735.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "placement": "Galeria de Trabalhos - Trabalho 3 (Funilaria Artesanal / Martelinho de Ouro)"
+    }
+  ],
+  "component_structure": {
+    "pages": {
+      "Home": "/app/frontend/src/pages/Home.tsx",
+      "Agendar": "/app/frontend/src/pages/Agendar.tsx",
+      "Admin": "/app/frontend/src/pages/Admin.tsx"
+    },
+    "custom_components": {
+      "Navbar": "/app/frontend/src/components/Navbar.tsx",
+      "Footer": "/app/frontend/src/components/Footer.tsx",
+      "BeforeAfterSlider": "/app/frontend/src/components/BeforeAfterSlider.tsx",
+      "PortfolioCard": "/app/frontend/src/components/PortfolioCard.tsx",
+      "VideoModal": "/app/frontend/src/components/VideoModal.tsx",
+      "FloatingWhatsApp": "/app/frontend/src/components/FloatingWhatsApp.tsx",
+      "BookingWizard": "/app/frontend/src/components/BookingWizard.tsx",
+      "AdminAppointmentsTab": "/app/frontend/src/components/admin/AdminAppointmentsTab.tsx",
+      "AdminGalleryTab": "/app/frontend/src/components/admin/AdminGalleryTab.tsx",
+      "AdminSettingsTab": "/app/frontend/src/components/admin/AdminSettingsTab.tsx",
+      "AdminIntegrationsTab": "/app/frontend/src/components/admin/AdminIntegrationsTab.tsx"
+    }
+  },
+  "instructions_to_main_agent": {
+    "brand_name": "Martelinho de Ouro Nadis Car",
+    "business_focus": "Especialistas em Martelinho de Ouro (DSP - Desamassamento sem Pintura), preservando a originalidade do veículo, sem repintura, com agilidade e perfeição milimétrica.",
+    "language": "pt-BR (Portuguese Brazilian)",
+    "currency_format": "R$ (Real Brasileiro), e.g., R$ 180,00",
+    "date_format": "dd/MM/yyyy HH:mm",
+    "key_integrations_specification": {
+      "whatsapp_click_to_chat": "Direct link `https://wa.me/5511999999999?text=Ol%C3%A1%2C%20gostaria%20de%20um%20or%C3%A7amento%20de%20Martelinho%20de%20Ouro%20para%20o%20meu%20carro` with dynamic phone configuration from database",
+      "booking_confirmation_whatsapp": "Automatic generation of pre-formatted WhatsApp message link with client name, service, date, vehicle model and plate for instant customer dispatch",
+      "google_calendar_sync": "Backend creates event representation, computes slot conflicts and exposes sync status badge (HIGHLIGHTED as MOCKED integration with realistic Google Calendar webhook/event simulation)",
+      "whatsapp_daily_summary_dispatch": "Admin button 'Disparar Resumo do Dia via WhatsApp' to trigger instant simulated/webhook dispatch of today's schedule to the funileiro's WhatsApp number"
+    },
+    "seed_and_demo_data": {
+      "admin_credentials": "admin@nadiscar.com.br / admin123",
+      "initial_services": [
+        { "name": "Martelinho de Ouro - Pequena Avaria", "duration_min": 60, "price_estimate": "A partir de R$ 150,00", "description": "Ideal para mossas de estacionamento e pequenas batidas de porta." },
+        { "name": "Martelinho de Ouro - Média Avaria / Vinco", "duration_min": 120, "price_estimate": "A partir de R$ 280,00", "description": "Recuperação de vincos em paralamas, portas e capô mantendo a tinta original." },
+        { "name": "Martelinho de Ouro - Granizo Completo", "duration_min": 240, "price_estimate": "Orçamento sob avaliação", "description": "Tratamento especializado para veículos atingidos por tempestades de granizo." }
+      ],
+      "initial_gallery_items": [
+        { "type": "image", "title": "Recuperação de Paralama BMW 320i", "category": "Martelinho de Ouro", "before_after": true, "before_url": "https://images.unsplash.com/photo-1599256872237-5dcc0fbe9668?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwzfHxhdXRvJTIwYm9keSUyMHJlcGFpciUyMHdvcmtzaG9wJTIwbWVjaGFuaWN8ZW58MHx8fHwxNzkyNzYzMzc2fDA&ixlib=rb-4.1.0&q=85", "after_url": "https://images.pexels.com/photos/29755711/pexels-photo-29755711.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" },
+        { "type": "video", "title": "Demonstração de Alavancas de Precisão", "category": "Vídeo Técnico", "video_url": "https://assets.mixkit.co/videos/preview/mixkit-mechanic-working-under-a-car-41618-large.mp4", "thumbnail": "https://images.unsplash.com/photo-1615906655593-ad0386982a0f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwxfHxhdXRvJTIwYm9keSUyMHJlcGFpciUyMHdvcmtzaG9wJTIwbWVjaGFuaWN8ZW58MHx8fHwxNzkyNzYzMzc2fDA&ixlib=rb-4.1.0&q=85" },
+        { "type": "image", "title": "Desamassamento de Porta sem Pintura", "category": "Porta Lateral", "before_after": false, "after_url": "https://images.pexels.com/photos/7540400/pexels-photo-7540400.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" }
+      ]
+    }
+  },
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": [
+    "Never apply universal transition: all. Use specific transition-colors or transition-transform.",
+    "Do not center-align the whole app container; keep left-aligned editorial flow.",
+    "Do not use generic SaaS blue or purple gradients. Stick to precision Obsidian Black (#0B0D11) with Gold/Amber (#F59E0B) highlights and WhatsApp Green (#25D366) badges.",
+    "Use data-testid attributes on all interactive elements (buttons, inputs, filters, tabs, forms, modals).",
+    "Integrations with Google Calendar and WhatsApp Cloud API MUST be clearly surfaced with status badges and MOCKED indicators in the Admin panel where applicable.",
+    "All copy must be polished Portuguese (pt-BR) with automotive terminology like 'Desamassamento sem Pintura (DSP)', 'Preservação da Tinta de Fábrica', 'Agendamento Online'."
+  ]
+}
